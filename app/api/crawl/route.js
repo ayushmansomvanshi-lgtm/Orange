@@ -2,7 +2,9 @@ import { runCrawl } from "../../../lib/crawler.js";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 800;
+// Longest a crawl may run on a serverless host such as Vercel. 60 works on every plan.
+// Raise it to 300 (Vercel Hobby with Fluid Compute) or 800 (Vercel Pro) to allow longer audits.
+export const maxDuration = 60;
 
 const clamp = (n, lo, hi, d) => { n = Number(n); return Number.isFinite(n) ? Math.min(hi, Math.max(lo, Math.round(n))) : d; };
 
