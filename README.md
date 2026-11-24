@@ -83,6 +83,8 @@ get cut off there. The app has no login, so anyone with the address can use it. 
 
 ### Vercel
 
+**Run JavaScript** is switched off automatically on online hosts, because they cannot run a browser. Use it by running Orange on your own computer.
+
 Set **Framework Preset** to **Next.js** and leave **Output Directory** empty (the included `vercel.json` also sets
 the framework). Vercel stops each crawl after `maxDuration` in `app/api/crawl/route.js` (60 seconds by default, so about
 100 to 300 pages). Raise it to 300 on Hobby or 800 on Pro for longer audits. For big audits, a normal Node host is better.

@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from "react";
 
 function Toggle({ on, onChange, label, hint, disabled }) {
   return (
@@ -12,6 +13,12 @@ function Toggle({ on, onChange, label, hint, disabled }) {
 export default function Options({ opts, setOpts, disabled }) {
   const posts = opts.mode === "posts";
   const set = (k, v) => setOpts((o) => ({ ...o, [k]: v }));
+  const [hosted, setHosted] = useState(false);
+  useEffect(() => {
+    fetch("/api/capabilities").then((r) => r.json()).then((c) => {
+      if (c && c.hosted) { setHosted(true); setOpts((o) => (o.render ? { ...o, render: false } : o)); }
+    }).catch(() => {});
+  }, [setOpts]);
   return (
     <details className="opts">
       <summary>Crawl settings</summary>
@@ -19,7 +26,7 @@ export default function Options({ opts, setOpts, disabled }) {
         <div className="toggles">
           {!posts && <Toggle on={opts.sitemap} onChange={(v) => set("sitemap", v)} label="Use sitemap" hint="Find pages through sitemap.xml and detect orphan pages" disabled={disabled} />}
           {!posts && <Toggle on={opts.skipArchives} onChange={(v) => set("skipArchives", v)} label="Skip archive and author pages" hint="Do not visit date, category, tag, author, and page-number pages. Needs a sitemap to find every post." disabled={disabled} />}
-          <Toggle on={opts.render} onChange={(v) => set("render", v)} label="Run JavaScript" hint="Render pages in Chromium (needs Playwright). Slower, but finds JavaScript errors" disabled={disabled} />
+          <Toggle on={opts.render && !hosted} onChange={(v) => set("render", v)} label={hosted ? "Run JavaScript (only on your own computer)" : "Run JavaScript"} hint={hosted ? "Online hosts cannot run a browser. Run Orange on your own computer to use this." : "Render pages in Chromium (needs Playwright). Slower, but finds JavaScript errors"} disabled={disabled || hosted} />
           {!posts && <Toggle on={opts.external} onChange={(v) => set("external", v)} label="Check outbound links" hint="Test links to other websites for 404s" disabled={disabled} />}
           <Toggle on={opts.robots} onChange={(v) => set("robots", v)} label="Obey robots.txt" hint="Skip pages that robots.txt disallows" disabled={disabled} />
         </div>
