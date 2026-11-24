@@ -1,0 +1,6 @@
+# Netlify settings for Orange. Netlify detects Next.js by itself, so leave "Publish directory" empty in the Netlify dashboard.
+[build]
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "22"
