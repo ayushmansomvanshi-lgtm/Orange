@@ -1,6 +1,12 @@
-# Netlify settings for Orange. Netlify detects Next.js by itself, so leave "Publish directory" empty in the Netlify dashboard.
+# Netlify settings for Orange (Next.js).
+# The publish directory and the Next.js runtime are set explicitly so Netlify always
+# builds the app instead of publishing the raw source folder (which causes "Page not found").
 [build]
   command = "npm run build"
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "22"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
